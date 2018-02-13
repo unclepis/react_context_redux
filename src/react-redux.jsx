@@ -1,3 +1,10 @@
+/**
+ * 通过context手写了一个react-redux的高阶函数connect 和redux的Provider
+ * 
+ * connect对只负责视图的dumb组件进行封装，事实上获取context里面的store是在connect高阶组件里面处理的
+ * Provider实际上是在根组件里面讲通过createStore生成的store放入到context中，这样里面的子组件就可以共享context了
+ */
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
