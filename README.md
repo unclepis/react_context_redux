@@ -7,7 +7,8 @@
 引用阮一峰老师的一句话：当你不知道你的项目需要不需要redux的时候，事实上，你的工程是不需要redux的，为什么呢？因为你的项目中组件的交互还没有复杂到你每写一个组件，都需要通过使用状态提升的方式来进行state的共享。事实上，说到redux，我们无非关注的就是数据共享和组件之间通信的问题，而react.js除了状态提升以外并没有更好的办法帮我们解决组件之间共享状态的问题。有人的可能会说可以通过context进行数据共享啊？确实可以，context是类似一个声明在全局的变量，一旦在父组件中定义了context那么其下的子组件都可以随意修改和共享context的数据，而使用context的问题也就显而易见了，都可以修改，那么对于维护和调试来说肯定是非常糟糕的。事实上，在最新的react 16的官方文档中，ContextAPI被重写了，也就是说这个在react 16之前被称为“最好不要或者谨慎使用的context”也许会在以后是redux的一种替代方案。
 
 ### 问题2：什么是redux？
-其实说起redux，如果讲一大堆官方文档中的概念，肯定很难理解。简单的说，redux的原理事实上也是使用的context，但是正如上面说的，如果直接使用context，全局变量让程序不可预测，react提高了修改和共享数据的门槛，这就是redux的意义。redux中的store存储着state状态，store中的数据不能被随意修改，所以redux提高了修改的门槛，只有通过使用dispatch方法才能改变里面的state，但是具体怎么改变state，用户是不可能直接和state打交道的，他们只能接触到view层，所以就需要view层的具体的action，根据定义好的修改方法reducer，告诉dispatch怎么修改state。
+其实说起redux，如果讲一大堆官方文档中的概念，肯定很难理解。简单的说，redux的原理事实上也是使用的context，但是正如上面说的，如果直接使用context，全局变量让程序不可预测，react提高了修改和共享数据的门槛，这就是redux的意义，引用react.js小书作者的一句话：这里的矛盾就是：“模块（组件）之间需要共享数据”和“数据可能被任意修改导致不可预测的结果”之间的矛盾。redux中的store存储着state状态，store中的数据不能被随意修改，所以redux提高了修改的门槛，只有通过使用dispatch方法才能改变里面的state，但是具体怎么改变state，用户是不可能直接和state打交道的，他们只能接触到view层，所以就需要view层的具体的action，根据定义好的修改方法reducer，告诉dispatch怎么修改state。
+
 
 ### 问题3：redux中基本概念都有哪些？
 store：存储state的地方
@@ -46,75 +47,6 @@ dispatch:唯一可以修改state的方式，这样就保证了state不能随意�
 
 ```
     store.dispatch({ type: 'update_title_text', text: 'uncle pis self-learning redux' });
-```
-
-### 问题4： 概念我好像也听懂了，到底怎么玩呢？
-我最近看到一个叫react.js小书的react新手教程，其实坐这从头到尾都是从遇到问题解决问题的角度，从手写一个redux，到后面通过官方提供的redux和react-redux逐步替换，重构代码，瞬间让我对redux有了一个很深的理解下面分先给大家：
-
-#### 背景说明：
-假设你有两个react的root dom节点一个id为header，另一个是content，顾名思义，一个放入表头，另一个放入内容
-
-```
- <div id="header"></div>
- <div id="content"></div>
-```
-基于上面的dom，我们想要做一个很简单的界面，一个header显示一个表头，一个content显示一行内容，下面有两个按钮可以控制整个界面的颜色风格
-
-#### 版本1
-基于上面的需求，我们很快的写出下面的代码
-1.先写一个函数渲染整个App
-
-```
-   // 渲染整个App
-   function renderApp(newAppState, oldAppState = {}) { // es6对于函数做了默认值处理，防止第一次调用函数没有初始状态
-     if (newAppState === oldAppState) {
-         return    // 传入newAppState和 oldAppState是处于性能考虑，当数据没有变化不重新调用这个方法
-     }
-     console.log('render app');
-     renderTitle(newAppState.title, oldAppState.title); // 渲染title
-     renderContent(newAppState.content, oldAppState.content); // 渲染content
- }
-```
-2.渲染title的函数
-
-```
-function renderTitle(newTitle, oldTitle = {}) {
-    if (newTitle === oldTitle) {
-        return
-    }
-    console.log('render title');
-    const titleDom = document.getElementById('title'); // 抓取title的dom
-    titleDom.innerHTML = newTitle.text; // 如果传入变量text则修改text
-    titleDom.style.color = newTitle.color; // 如果传入变量color则修改title的颜色
-}
-
-```
-3.渲染content的函数
-
-```
- function renderContent(newContent, oldContent = {}) {
-     if (newContent === oldContent) {
-         return
-     }
-     console.log('render content');
-     const titleDom = document.getElementById('content'); // 抓取content的dom
-     titleDom.innerHTML = newContent.text; // 如果传入变量text则修改text
-     titleDom.style.color = newContent.color; // 如果传入变量color则修改content的颜色
- }
-```
-
-
-const store = createStore(reducer);
-let oldAppState = store.getState();
-store.subscribe(() => {
-    const newAppState = store.getState();
-    renderApp(newAppState, oldAppState);
-    oldAppState = newAppState;
-});
-renderApp(store.getState());
-store.dispatch({ type: 'update_title_text', text: 'uncle pis self-learning redux' });
-store.dispatch({ type: 'update_title_color', color: 'green' });
-
 ```
 
 ## redux基本概念和常用api
