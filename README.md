@@ -1,5 +1,52 @@
 # 使用redux和context上下文管理组件通信
 
+## 思路梳理
+在学习react的这段时间，一直看官方文档和各种学习资料在说，react实际上只是提供了一个MVC结构中的view层解决方案，也就是说它是视图层的一个库，在自我学习的过程中也遇到了一个一个问题，这些问题随着学习的深入也慢慢迎刃而解
+
+### 问题1：为什么引入redux？
+引用阮一峰老师的一句话：当你不知道你的项目需要不需要redux的时候，事实上，你的工程是不需要redux的，为什么呢？因为你的项目中组件的交互还没有复杂到你每写一个组件，都需要通过使用状态提升的方式来进行state的共享。事实上，说到redux，我们无非关注的就是数据共享和组件之间通信的问题，而react.js除了状态提升以外并没有更好的办法帮我们解决组件之间共享状态的问题。有人的可能会说可以通过context进行数据共享啊？确实可以，context是类似一个声明在全局的变量，一旦在父组件中定义了context那么其下的子组件都可以随意修改和共享context的数据，而使用context的问题也就显而易见了，都可以修改，那么对于维护和调试来说肯定是非常糟糕的。事实上，在最新的react 16的官方文档中，ContextAPI被重写了，也就是说这个在react 16之前被称为“最好不要或者谨慎使用的context”也许会在以后是redux的一种替代方案。
+
+### 问题2：什么是redux？
+其实说起redux，如果讲一大堆官方文档中的概念，肯定很难理解。简单的说，redux的原理事实上也是使用的context，但是正如上面说的，如果直接使用context，全局变量让程序不可预测，react提高了修改和共享数据的门槛，这就是redux的意义。redux中的store存储着state状态，store中的数据不能被随意修改，所以redux提高了修改的门槛，只有通过使用dispatch方法才能改变里面的state，但是具体怎么改变state，用户是不可能直接和state打交道的，他们只能接触到view层，所以就需要view层的具体的action，根据定义好的修改方法reducer，告诉dispatch怎么修改state。
+
+### 问题3：redux中基本概念都有哪些？
+store：存储state的地方
+action:是一个有type字段的对象，也可以传入修改state的值，有一个规范传入的是payload
+
+···
+    {
+      type：‘change_value’,
+      payload: 2018
+    }
+···
+
+reducer：根据action修改state的逻辑规则，下面的规则就是如果传入的action是change_color，那么修改state中的themeColor为action.color;否则返回原有的state
+
+···
+    const themeReducer = (state, action) => {
+    if (!state) {
+        return {
+            themeColor: 'red'
+        }
+    }
+    switch (action.type) {
+        case 'change_color':
+            return {
+                ...state,
+                themeColor: action.themeColor
+            }
+        default:
+            return state;
+    }
+}
+···
+
+dispatch:唯一可以修改state的方式，这样就保证了state不能随意修改，怎么修改呢？你告诉我action
+
+···
+    store.dispatch({ type: 'update_title_text', text: 'uncle pis self-learning redux' });
+···
+
 ## redux基本概念和常用api
 
 ```
