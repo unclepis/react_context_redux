@@ -13,39 +13,39 @@
 store：存储state的地方
 action:是一个有type字段的对象，也可以传入修改state的值，有一个规范传入的是payload
 
-···
+```
     {
       type：‘change_value’,
       payload: 2018
     }
-···
+```
 
 reducer：根据action修改state的逻辑规则，下面的规则就是如果传入的action是change_color，那么修改state中的themeColor为action.color;否则返回原有的state
 
-···
-    const themeReducer = (state, action) => {
-    if (!state) {
-        return {
-            themeColor: 'red'
-        }
-    }
-    switch (action.type) {
-        case 'change_color':
-            return {
-                ...state,
-                themeColor: action.themeColor
-            }
-        default:
-            return state;
-    }
-}
-···
+```
+      const themeReducer = (state, action) => {
+      if (!state) {
+          return {
+              themeColor: 'red'
+          }
+      }
+      switch (action.type) {
+          case 'change_color':
+              return {
+                  ...state,
+                  themeColor: action.themeColor
+              }
+          default:
+              return state;
+      }
+  }
+```
 
 dispatch:唯一可以修改state的方式，这样就保证了state不能随意修改，怎么修改呢？你告诉我action
 
-···
+```
     store.dispatch({ type: 'update_title_text', text: 'uncle pis self-learning redux' });
-···
+```
 
 ## redux基本概念和常用api
 
