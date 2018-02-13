@@ -11,6 +11,7 @@
 
 ### 问题3：redux中基本概念都有哪些？
 store：存储state的地方
+
 action:是一个有type字段的对象，也可以传入修改state的值，有一个规范传入的是payload
 
 ```
