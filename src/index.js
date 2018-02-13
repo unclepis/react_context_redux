@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+import React, { Component } from 'react'
+import ReactDom from 'react-dom'
 import Header from './header'
 import Content from './content'
+import { Provider } from './react-redux' // 通过context手写的Provider，为所有功能组件提供context
+//import { Provider } from 'react-redux' // 这是真正react-redux提供的provider，在根组件中创建了context
+//import { createStore } from 'redux' // 这是官方提供的createStore生成store
 
-function CreateStore(themeReducer) {
+// 自己手动实现的createStore，后续引入redux的createStore
+function createStore(themeReducer) {
     let state = null;
     const listeners = [];
     const subscribe = (listener) => listeners.push(listener);
@@ -36,16 +37,9 @@ const themeReducer = (state, action) => {
     }
 }
 
-const store = CreateStore(themeReducer);
-export default class Index extends React.Component {
-    static childContextTypes = {
-        store: PropTypes.object
-    }
+const store = createStore(themeReducer);
 
-    getChildContext() {
-        return { store }
-    }
-
+class Index extends Component {
     render() {
         return (
             <div>
@@ -55,5 +49,13 @@ export default class Index extends React.Component {
         )
     }
 }
-ReactDOM.render(<Index />, document.getElementById('root'));
-registerServiceWorker();
+
+ReactDom.render(
+    <Provider store={store}>
+        <Index />
+    </Provider>,
+    document.getElementById('root'));
+
+
+
+
