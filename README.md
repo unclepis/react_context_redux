@@ -48,6 +48,75 @@ dispatch:唯一可以修改state的方式，这样就保证了state不能随意�
     store.dispatch({ type: 'update_title_text', text: 'uncle pis self-learning redux' });
 ```
 
+### 问题4： 概念我好像也听懂了，到底怎么玩呢？
+我最近看到一个叫react.js小书的react新手教程，其实坐这从头到尾都是从遇到问题解决问题的角度，从手写一个redux，到后面通过官方提供的redux和react-redux逐步替换，重构代码，瞬间让我对redux有了一个很深的理解下面分先给大家：
+
+#### 背景说明：
+假设你有两个react的root dom节点一个id为header，另一个是content，顾名思义，一个放入表头，另一个放入内容
+
+```
+ <div id="header"></div>
+ <div id="content"></div>
+```
+基于上面的dom，我们想要做一个很简单的界面，一个header显示一个表头，一个content显示一行内容，下面有两个按钮可以控制整个界面的颜色风格
+
+#### 版本1
+基于上面的需求，我们很快的写出下面的代码
+1.先写一个函数渲染整个App
+
+```
+   // 渲染整个App
+   function renderApp(newAppState, oldAppState = {}) { // es6对于函数做了默认值处理，防止第一次调用函数没有初始状态
+     if (newAppState === oldAppState) {
+         return    // 传入newAppState和 oldAppState是处于性能考虑，当数据没有变化不重新调用这个方法
+     }
+     console.log('render app');
+     renderTitle(newAppState.title, oldAppState.title); // 渲染title
+     renderContent(newAppState.content, oldAppState.content); // 渲染content
+ }
+```
+2.渲染title的函数
+
+```
+function renderTitle(newTitle, oldTitle = {}) {
+    if (newTitle === oldTitle) {
+        return
+    }
+    console.log('render title');
+    const titleDom = document.getElementById('title'); // 抓取title的dom
+    titleDom.innerHTML = newTitle.text; // 如果传入变量text则修改text
+    titleDom.style.color = newTitle.color; // 如果传入变量color则修改title的颜色
+}
+
+```
+3.渲染content的函数
+
+```
+ function renderContent(newContent, oldContent = {}) {
+     if (newContent === oldContent) {
+         return
+     }
+     console.log('render content');
+     const titleDom = document.getElementById('content'); // 抓取content的dom
+     titleDom.innerHTML = newContent.text; // 如果传入变量text则修改text
+     titleDom.style.color = newContent.color; // 如果传入变量color则修改content的颜色
+ }
+```
+
+
+const store = createStore(reducer);
+let oldAppState = store.getState();
+store.subscribe(() => {
+    const newAppState = store.getState();
+    renderApp(newAppState, oldAppState);
+    oldAppState = newAppState;
+});
+renderApp(store.getState());
+store.dispatch({ type: 'update_title_text', text: 'uncle pis self-learning redux' });
+store.dispatch({ type: 'update_title_color', color: 'green' });
+
+```
+
 ## redux基本概念和常用api
 
 ```
