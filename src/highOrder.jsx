@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 // 高阶组件封装从context中获取store的重复代码
-export default (WrappedComponent) => {
+export const connect = (WrappedComponent) => {
     class ContextComponent extends Component {
         static contextTypes = {
             store: PropTypes.object
@@ -41,3 +41,29 @@ export default (WrappedComponent) => {
     }
     return ContextComponent // 封装后的组件
 }
+
+export class Provider extends Component {
+    static propTypes = {
+        store: PropTypes.object,
+        children: PropTypes.any
+    }
+
+    static childContextTypes = {
+        store: PropTypes.object
+    }
+
+    getChildContext() {
+        return {
+            store: this.props.store
+        }
+    }
+
+
+    render() {
+        return (
+            <div>
+                {this.props.children}
+            </div>
+        )
+    }
+} 
