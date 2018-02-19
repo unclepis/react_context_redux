@@ -18,8 +18,8 @@ export default class SwitchButton extends Component {
         return (
             <div>
                 {
-                    options.map(option => {
-                        return <button style={{ color: this.props.themeColor }} onClick={this._changeThemeColor.bind(this, option)}>{option}</button>
+                    options.map((option, index) => {
+                        return <button key={index} style={{ color: this.props.themeColor }} onClick={this._changeThemeColor.bind(this, option)}>{option}</button>
                     })
                 }
             </div>

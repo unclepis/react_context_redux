@@ -1,86 +1,46 @@
-<<<<<<< HEAD
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import Header from './container/header'
-import Content from './container/content'
+import HeaderTitle from './container/header'
+import ContentTitle from './container/content'
 // import { Provider } from './highOrder'
 import { Provider } from 'react-redux'
 import { Reducer } from './appReducer/reducer'
 // import { CreateStore } from './store'
 import { createStore } from 'redux'
+import { Layout } from 'antd'
+import 'antd/dist/antd.css'
 
 const store = createStore(Reducer);
+const { Header, Footer, Sider, Content } = Layout;
 
-ReactDOM.render(
-    <Provider store={store}>
-        <div>
-            <Header />
-            <Content />
-        </div>
-    </Provider>, document.getElementById('root'));
-registerServiceWorker();
-=======
-import React, { Component } from 'react'
-import ReactDom from 'react-dom'
-import Header from './header'
-import Content from './content'
-import { Provider } from './react-redux' // 通过context手写的Provider，为所有功能组件提供context
-//import { Provider } from 'react-redux' // 这是真正react-redux提供的provider，在根组件中创建了context
-//import { createStore } from 'redux' // 这是官方提供的createStore生成store
 
-// 自己手动实现的createStore，后续引入redux的createStore
-function createStore(themeReducer) {
-    let state = null;
-    const listeners = [];
-    const subscribe = (listener) => listeners.push(listener);
-    const getState = () => state;
-    const dispatch = (action) => {
-        state = themeReducer(state, action);
-        listeners.forEach(listener => listener());
-    }
-    dispatch({});
-    return { getState, dispatch, subscribe };
-}
 
-const themeReducer = (state, action) => {
-    if (!state) {
-        return {
-            themeColor: 'red'
-        }
-    }
-    switch (action.type) {
-        case 'change_color':
-            return {
-                ...state,
-                themeColor: action.themeColor
-            }
-        default:
-            return state;
-    }
-}
-
-const store = createStore(themeReducer);
-
-class Index extends Component {
-    render() {
-        return (
+const renders = () => {
+    const { themeColor } = store.getState()
+    ReactDOM.render(
+        <Provider store={store}>
             <div>
-                <Header />
-                <Content />
+                <Layout>
+                    <Header style={{ backgroundColor: '#7dbcea' }}>
+                        <HeaderTitle />
+                    </Header>
+                    <Layout>
+                        <Sider style={{ backgroundColor: '#3ba0e9' }} >
+                            <div style={{ color: themeColor }}> This is Slide</div>
+                        </Sider>
+                        <Content style={{ backgroundColor: 'rgba(16, 142, 233, 1)' }}>
+                            <ContentTitle />
+                        </Content>
+                    </Layout>
+                    <Footer style={{ backgroundColor: '#7dbcea' }}>
+                        <div style={{ color: themeColor }}>This is footer</div>
+                    </Footer>
+                </Layout>
             </div>
-        )
-    }
-}
-
-ReactDom.render(
-    <Provider store={store}>
-        <Index />
-    </Provider>,
-    document.getElementById('root'));
-
-
-
-
->>>>>>> b306e097d9ed6edfc3ba2ec808812748385bb70b
+        </Provider>, document.getElementById('root'))
+};
+store.subscribe(renders);
+renders();
+registerServiceWorker();

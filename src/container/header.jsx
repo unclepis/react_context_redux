@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import Header from '../components/header'
+import HeaderTitle from '../components/header'
 
 const mapStateToProps = (state) => {
     return {
         themeColor: state.themeColor
     }
 }
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(HeaderTitle);

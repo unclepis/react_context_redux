@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Content from '../components/content'
+import ContentTitle from '../components/content'
 
 const mapStateToProps = (state) => {
     return {
@@ -17,4 +17,4 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Content);
+export default connect(mapStateToProps, mapDispatchToProps)(ContentTitle);
