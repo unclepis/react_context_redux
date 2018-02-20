@@ -21,7 +21,7 @@ const renders = () => {
     const { themeColor } = store.getState()
     ReactDOM.render(
         <Provider store={store}>
-            <div>
+            <div style={{height:'100vh'}}>
                 <Layout>
                     <Header style={{ backgroundColor: '#7dbcea' }}>
                         <HeaderTitle />

@@ -14,7 +14,7 @@ export default class SwitchButton extends Component {
     }
 
     render() {
-        const options = ['red', 'blue'];
+        const options = ['red', 'black'];
         return (
             <div>
                 {

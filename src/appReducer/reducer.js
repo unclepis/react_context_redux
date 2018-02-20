@@ -1,7 +1,8 @@
 export const Reducer = (state, action) => {
     if (!state) {
         return {
-            themeColor: 'red'
+            themeColor: 'red',
+            comments: []
         }
     }
     switch (action.type) {
@@ -9,6 +10,11 @@ export const Reducer = (state, action) => {
             return {
                 ...state,
                 themeColor: action.themeColor
+            }
+        case 'add_comment':
+            return {
+                ...state,
+                comments: action.comments
             }
         default:
             return state;
