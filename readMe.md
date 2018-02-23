@@ -1,3 +1,4 @@
+# 官网demo todoList的一点思考，如何使用redux开始组件化开发？
 ## redux
   - import { combineReducers } from 'redux' 用于将各个reducer合并
   - import {connect} from 'redux' 一个高阶函数，用于将可复用组件进行加工
